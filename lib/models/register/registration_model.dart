@@ -42,17 +42,17 @@ class RegistrationModel {
 // }
   toJson() {
     Map param = {
-      'firstname': this.firstname,
-      'lastname': this.lastname,
-      'email': this.email,
-      'password': this.password,
+      'firstname': firstname,
+      'lastname': lastname,
+      'email': email,
+      'password': password,
       'role': '',
-      'grup': this.grup,
-      'hp': this.hp,
-      'tgl_lahir': this.tgl_lahir,
-      'jenis_kelamin': this.jenis_kelamin,
-      'strict_password': this.strict_password,
-      'referral_code': this.referral_code
+      'grup': grup,
+      'hp': hp,
+      'tgl_lahir': tgl_lahir,
+      'jenis_kelamin': jenis_kelamin,
+      'strict_password': strict_password,
+      'referral_code': referral_code
     };
 
     return jsonEncode(param);

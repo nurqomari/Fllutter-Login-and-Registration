@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'dart:convert';
 import 'package:koffie_flutter_bdd/blocs/register/data/registration_data.dart';
 import 'package:koffie_flutter_bdd/models/register/registration_model.dart';
 import 'package:koffie_flutter_bdd/providers/api_call.dart';
@@ -37,16 +38,19 @@ class RegistrationRepository {
 
     if (response is Response) {
       if (response.statusCode == 200) {
-        if (response.data['status'] == ApiCall.RESPONSE_SUCCESS) {
-          return RegistrationData(true, response.data['message'][0], null);
+        if (response.data['status']['kode'] == "success") {
+          return RegistrationData(
+              true, response.data['data']['keterangan'], null);
         } else {
-          Map errorContainer = {"message": response.data['message'][0]};
-          if (response.data['message'][0]
-                  .toString()
-                  .compareTo("SendingInvalidEmail") ==
-              0) {
-            errorContainer = {"message": "Email is not valid"};
-          }
+          Map errorContainer = {
+            "message": response.data['status']['keterangan']
+          };
+          // if (response.data['data'][0]
+          //         .toString()
+          //         .compareTo("SendingInvalidEmail") ==
+          //     0) {
+          //   errorContainer = {"message": "Email is not valid"};
+          // }
           return RegistrationData(false, '', errorContainer);
         }
       } else {

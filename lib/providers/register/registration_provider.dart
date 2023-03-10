@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:dio/dio.dart';
 import 'package:koffie_flutter_bdd/constants/constants.dart';
@@ -18,15 +19,54 @@ class RegistrationProvider {
   // }
 
   register(RegistrationModel registrationModel) async {
-    Response response = await ApiCall().postRequest("${Constants.baseUrl}/user",
-        param: registrationModel.toJson(), showResponse: true);
+    // var params = registrationModel.toJson();
+    // Dio _dio = Dio();
+    // Response response = await _dio.post(
+    //   "${Constants.baseUrl}/users",
+    //   options: Options(headers: {
+    //     HttpHeaders.contentTypeHeader: "application/json",
+    //   }),
+    //   data: registrationModel.toJson(),
+    // );
+
+    // Response response = await ApiCall().postRequest(
+    //     "${Constants.baseUrl}/users",
+    //     param: params,
+    //     showResponse: true);
     /*var response = await ApiCall().postRequest(
         "${Constants.baseUrl}/${Constants.apiVersion1}/register",
         param: registrationModel.toJson(),
         showResponse: true,
         contentType: ApiCall.contentType[ContentType.json]);*/
 
-    return response;
+    // return response;
+
+    Map param = {
+      "email": registrationModel.email,
+      "hp": registrationModel.hp,
+      "firstname": registrationModel.firstname,
+      "lastname": registrationModel.lastname,
+      "grup": "member",
+      "role": "",
+      "tgl_lahir": "1980-08-14",
+      "jenis_kelamin": 1,
+      "password": "Rahasia1@",
+      "strict_password": "false",
+      "referral_code": ""
+    };
+    var input = jsonEncode(param);
+    var contentType = Headers.jsonContentType;
+
+    /*var data = await ApiCall().postRequest("${Constants.baseUrl}/token", param: param,
+        contentType: contentType, useToken: false, accessControlAllowOrigin: true, showResponse: true);*/
+
+    var data = await ApiCall().postRequest("${Constants.baseUrl}/users",
+        param: input,
+        showResponse: true,
+        accessControlAllowOrigin: true,
+        contentType: contentType);
+
+    return data;
   }
 
   // resendVerification(String email) async {

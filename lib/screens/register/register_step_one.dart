@@ -1,6 +1,6 @@
 import 'dart:developer';
 
-import 'package:another_flushbar/flushbar.dart';
+// import 'package:another_flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -94,7 +94,7 @@ class _State extends State<RegisterStepOne> {
                         return AlertDialog(
                             content: Container(
                                 height: Dimens.screenHeight(context,
-                                    spaceMultiplier: 0.37),
+                                    spaceMultiplier: 0.2),
                                 width: Dimens.screenWidth(context,
                                     spaceMultiplier: 0.7),
                                 child: Column(
@@ -110,30 +110,16 @@ class _State extends State<RegisterStepOne> {
                                         ),
                                         decoration: BoxDecoration(
                                             shape: BoxShape.circle,
-                                            color: Colors.black),
+                                            color: Colors.green),
                                       ),
                                     ),
                                     Padding(
                                         padding: EdgeInsets.only(bottom: 20)),
                                     Text(
-                                      "Your reservation is complete",
+                                      "Your registration is success",
                                       style: TextStyle(
                                           fontSize: Dimens.font14,
                                           fontWeight: FontWeight.w600),
-                                    ),
-                                    Padding(
-                                        padding: EdgeInsets.only(bottom: 20)),
-                                    Text(
-                                      "Please also check your email",
-                                      style: TextStyle(
-                                          fontSize: Dimens.font12,
-                                          fontWeight: FontWeight.w500),
-                                    ),
-                                    Text(
-                                      "for detail confirmation.",
-                                      style: TextStyle(
-                                          fontSize: Dimens.font12,
-                                          fontWeight: FontWeight.w500),
                                     ),
                                     Padding(
                                         padding: EdgeInsets.only(bottom: 20)),
@@ -179,20 +165,79 @@ class _State extends State<RegisterStepOne> {
                 if (state is OnErrorRegistration) {
                   //show dialog balik ke form
                   setLoadingState(state: false);
-                  WidgetsBinding.instance!.addPostFrameCallback((_) async {
-                    await Flushbar(
-                      messageText: Text(
-                        'Registration failed',
-                        // style: GoogleFonts.getFont('Montserrat',
-                        //     fontSize: 14, color: Colors.white),
-                      ),
-                      margin: EdgeInsets.only(bottom: 30),
-                      maxWidth: MediaQuery.of(context).size.width * 0.85,
-                      padding: EdgeInsets.all(20),
-                      borderRadius: BorderRadius.circular(20),
-                      duration: Duration(seconds: 3),
-                      backgroundColor: Colors.red,
-                    ).show(context);
+                  WidgetsBinding.instance?.addPostFrameCallback((_) async {
+                    await showDialog(
+                      barrierDismissible: false,
+                      context: context,
+                      builder: (BuildContext context) {
+                        return AlertDialog(
+                            content: Container(
+                                height: Dimens.screenHeight(context,
+                                    spaceMultiplier: 0.2),
+                                width: Dimens.screenWidth(context,
+                                    spaceMultiplier: 0.7),
+                                child: Column(
+                                  children: [
+                                    Center(
+                                      child: Container(
+                                        width: 80,
+                                        height: 60,
+                                        child: Icon(
+                                          Icons.check,
+                                          size: 40,
+                                          color: Colors.white,
+                                        ),
+                                        decoration: BoxDecoration(
+                                            shape: BoxShape.circle,
+                                            color: Colors.red),
+                                      ),
+                                    ),
+                                    Padding(
+                                        padding: EdgeInsets.only(bottom: 20)),
+                                    Text(
+                                      "Your registration is failed",
+                                      style: TextStyle(
+                                          fontSize: Dimens.font14,
+                                          fontWeight: FontWeight.w600),
+                                    ),
+                                    Padding(
+                                        padding: EdgeInsets.only(bottom: 20)),
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        Container(
+                                          width: MediaQuery.of(context)
+                                                  .size
+                                                  .width *
+                                              0.35,
+                                          child: TextButton(
+                                            style: ButtonStyle(
+                                              backgroundColor:
+                                                  MaterialStateProperty.all<
+                                                      Color>(Colors.black),
+                                            ),
+                                            child: Text(
+                                              "OK!",
+                                              style: TextStyle(
+                                                  color: Colors.white,
+                                                  fontSize: Dimens.font10),
+                                            ),
+                                            onPressed: () {
+                                              Navigator.pushNamedAndRemoveUntil(
+                                                  context,
+                                                  EmailLogin.ID,
+                                                  (Route<dynamic> route) =>
+                                                      false);
+                                            },
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ],
+                                )));
+                      },
+                    );
                   });
                 }
                 if (state is OnProgressRegistration) {
@@ -622,6 +667,7 @@ class _State extends State<RegisterStepOne> {
                                         registrationModel.lastname = lastname;
                                         registrationModel.hp = hp;
                                         registrationModel.password = password;
+                                        registrationModel.grup = "member";
 
                                         registrationBloc!
                                             .attemptRegister(registrationModel);
